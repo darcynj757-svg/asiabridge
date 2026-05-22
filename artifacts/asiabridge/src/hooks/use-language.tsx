@@ -22,7 +22,15 @@ const translations: Translations = {
   "hero.subtitle": { ru: "Прямые поставки от производителей России и стран СНГ покупателям Юго-Восточной Азии.", en: "Direct supplies from manufacturers in Russia and CIS countries to buyers in Southeast Asia." },
   "hero.cta": { ru: "Перейти в каталог", en: "Go to Catalog" },
 
-  // Add more as needed
+  // Catalog
+  "catalog.title": { ru: "Каталог товаров", en: "Product Catalog" },
+  "catalog.search": { ru: "Искать товары по названию, описанию...", en: "Search products by name, description..." },
+  "catalog.filters": { ru: "Фильтры", en: "Filters" },
+  "catalog.category": { ru: "Категория", en: "Category" },
+  "catalog.country": { ru: "Страна происхождения", en: "Origin Country" },
+
+  // Dashboard
+  "dashboard.title": { ru: "Личный кабинет", en: "Dashboard" },
 };
 
 interface LanguageContextType {
