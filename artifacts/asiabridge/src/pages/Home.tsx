@@ -83,7 +83,7 @@ export default function Home() {
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="lg" variant="outline" className="border-white/50 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm text-base px-8 font-semibold w-full sm:w-auto">
+              <Button size="lg" className="glass-btn text-base px-8 font-semibold w-full sm:w-auto border-0">
                 {t("hero.partner")}
               </Button>
             </Link>
@@ -97,14 +97,7 @@ export default function Home() {
               {statsData.map(({ labelKey, value }) => (
                 <div
                   key={labelKey}
-                  className="rounded-2xl p-5 text-center space-y-1"
-                  style={{
-                    background: "rgba(255,255,255,0.10)",
-                    backdropFilter: "blur(20px) saturate(160%)",
-                    WebkitBackdropFilter: "blur(20px) saturate(160%)",
-                    border: "1px solid rgba(255,255,255,0.18)",
-                    boxShadow: "0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.18)",
-                  }}
+                  className="glass-card rounded-2xl p-5 text-center space-y-1"
                 >
                   <div className="text-4xl md:text-5xl font-black text-[#F7941D]">
                     {statsLoading ? <Skeleton className="h-12 w-16 mx-auto bg-white/10" /> : value ?? 0}

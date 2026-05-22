@@ -369,4 +369,67 @@
   .border.hover-elevate:not(.no-hover-interaction-elevate)::after {
     inset: -1px;
   }
+
+  /* Liquid Glass */
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 4px 24px rgba(13, 27, 42, 0.08);
+  }
+
+  .glass-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.08) 100%);
+    backdrop-filter: blur(28px) saturate(200%) brightness(1.08);
+    -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.08);
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow:
+      0 2px 0 rgba(255,255,255,0.45) inset,
+      0 -1px 0 rgba(0,0,0,0.08) inset,
+      0 8px 32px rgba(0,0,0,0.18),
+      0 1px 8px rgba(255,255,255,0.12);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+    pointer-events: none;
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    top: -40%; left: -20%;
+    width: 60%; height: 80%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+    transform: rotate(-20deg);
+  }
+
+  .glass-btn {
+    background: linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.08) 100%);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255,255,255,0.4);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.5) inset,
+      0 4px 16px rgba(0,0,0,0.15);
+    color: white;
+    transition: all 0.2s ease;
+  }
+
+  .glass-btn:hover {
+    background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.15) 100%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.6) inset,
+      0 6px 20px rgba(0,0,0,0.2);
+  }
 }
