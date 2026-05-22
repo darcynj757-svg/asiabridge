@@ -14,9 +14,10 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [, setLocation] = useLocation();
-  const { data: user, isLoading, refetch } = useGetMe({
+  const { data: user, isLoading, isError, refetch } = useGetMe({
     query: {
       retry: false,
+      staleTime: 60_000,
     }
   });
 
@@ -34,7 +35,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user: user || null, isLoading, logout, refetchUser: refetch }}>
+    <AuthContext.Provider value={{ user: user || null, isLoading: isLoading && !isError, logout, refetchUser: refetch }}>
       {children}
     </AuthContext.Provider>
   );
