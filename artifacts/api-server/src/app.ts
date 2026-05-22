@@ -1,9 +1,7 @@
 import express, { type Express } from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import pinoHttp from "pino-http";
-import session from "express-session";
-import connectPgSimple from "connect-pg-simple";
-import { pool } from "@workspace/db";
 import router from "./routes";
 import { logger } from "./lib/logger";
 
@@ -52,29 +50,7 @@ app.use(
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-const PgSession = connectPgSimple(session);
-
-// On Replit the server always runs behind an HTTPS proxy (both dev and prod),
-// so cookies must always be secure + sameSite:"none".
-const behindHttpsProxy = !!(process.env.REPLIT_DEV_DOMAIN || process.env.NODE_ENV === "production");
-
-app.use(
-  session({
-    store: new PgSession({
-      pool,
-    }),
-    secret: process.env.SESSION_SECRET ?? "asiabridge-secret-key",
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-      httpOnly: true,
-      secure: behindHttpsProxy,
-      sameSite: behindHttpsProxy ? "none" : "lax",
-    },
-  }),
-);
+app.use(cookieParser());
 
 app.use("/api", router);
 

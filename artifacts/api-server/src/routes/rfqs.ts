@@ -7,6 +7,7 @@ import {
   UpdateRfqParams,
   GetRfqParams,
 } from "@workspace/api-zod";
+import { getUserIdFromRequest } from "./auth";
 
 const router: IRouter = Router();
 
@@ -31,7 +32,7 @@ async function serializeRfq(rfq: typeof rfqsTable.$inferSelect) {
 }
 
 router.get("/rfqs", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -48,7 +49,7 @@ router.get("/rfqs", async (req, res): Promise<void> => {
 });
 
 router.post("/rfqs", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -70,7 +71,7 @@ router.post("/rfqs", async (req, res): Promise<void> => {
 });
 
 router.get("/rfqs/:id", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -97,7 +98,7 @@ router.get("/rfqs/:id", async (req, res): Promise<void> => {
 });
 
 router.patch("/rfqs/:id", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;

@@ -9,6 +9,7 @@ import {
   DeleteProductParams,
   ListProductsQueryParams,
 } from "@workspace/api-zod";
+import { getUserIdFromRequest } from "./auth";
 
 const router: IRouter = Router();
 
@@ -66,7 +67,7 @@ router.get("/products", async (req, res): Promise<void> => {
 });
 
 router.post("/products", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -104,7 +105,7 @@ router.get("/products/:id", async (req, res): Promise<void> => {
 });
 
 router.patch("/products/:id", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -139,7 +140,7 @@ router.patch("/products/:id", async (req, res): Promise<void> => {
 });
 
 router.delete("/products/:id", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;

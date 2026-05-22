@@ -1,10 +1,48 @@
 import { Router, type IRouter } from "express";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { db, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { RegisterBody, LoginBody } from "@workspace/api-zod";
 
 const router: IRouter = Router();
+
+const JWT_SECRET = process.env.SESSION_SECRET ?? "asiabridge-secret-key";
+const COOKIE_NAME = "ab_token";
+const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
+
+const behindHttpsProxy = !!(process.env.REPLIT_DEV_DOMAIN || process.env.NODE_ENV === "production");
+
+function setCookie(res: any, userId: number) {
+  const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "30d" });
+  res.cookie(COOKIE_NAME, token, {
+    httpOnly: true,
+    secure: behindHttpsProxy,
+    sameSite: behindHttpsProxy ? "none" : "lax",
+    maxAge: COOKIE_MAX_AGE,
+    path: "/",
+  });
+}
+
+function clearCookie(res: any) {
+  res.clearCookie(COOKIE_NAME, {
+    httpOnly: true,
+    secure: behindHttpsProxy,
+    sameSite: behindHttpsProxy ? "none" : "lax",
+    path: "/",
+  });
+}
+
+export function getUserIdFromRequest(req: any): number | null {
+  const token = req.cookies?.[COOKIE_NAME];
+  if (!token) return null;
+  try {
+    const payload = jwt.verify(token, JWT_SECRET) as { userId: number };
+    return payload.userId;
+  } catch {
+    return null;
+  }
+}
 
 function serializeUser(user: typeof usersTable.$inferSelect) {
   return {
@@ -44,7 +82,7 @@ router.post("/auth/register", async (req, res): Promise<void> => {
     .values({ email, passwordHash, role, companyName, country, category })
     .returning();
 
-  (req.session as any).userId = user.id;
+  setCookie(res, user.id);
   res.status(201).json(serializeUser(user));
 });
 
@@ -69,18 +107,17 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  (req.session as any).userId = user.id;
+  setCookie(res, user.id);
   res.json(serializeUser(user));
 });
 
 router.post("/auth/logout", async (req, res): Promise<void> => {
-  req.session.destroy(() => {
-    res.json({ ok: true });
-  });
+  clearCookie(res);
+  res.json({ ok: true });
 });
 
 router.get("/auth/me", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;

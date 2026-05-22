@@ -2,11 +2,12 @@ import { Router, type IRouter } from "express";
 import { db, favoritesTable, productsTable, usersTable } from "@workspace/db";
 import { eq, and } from "drizzle-orm";
 import { AddFavoriteBody, RemoveFavoriteParams } from "@workspace/api-zod";
+import { getUserIdFromRequest } from "./auth";
 
 const router: IRouter = Router();
 
 router.get("/favorites", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -58,7 +59,7 @@ router.get("/favorites", async (req, res): Promise<void> => {
 });
 
 router.post("/favorites", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -95,7 +96,7 @@ router.post("/favorites", async (req, res): Promise<void> => {
 });
 
 router.delete("/favorites/:productId", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;

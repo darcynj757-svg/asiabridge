@@ -2,11 +2,12 @@ import { Router, type IRouter } from "express";
 import { db, messagesTable, rfqsTable, usersTable } from "@workspace/db";
 import { eq } from "drizzle-orm";
 import { CreateMessageBody, CreateMessageParams, ListMessagesParams } from "@workspace/api-zod";
+import { getUserIdFromRequest } from "./auth";
 
 const router: IRouter = Router();
 
 router.get("/rfqs/:id/messages", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
@@ -67,7 +68,7 @@ router.get("/rfqs/:id/messages", async (req, res): Promise<void> => {
 });
 
 router.post("/rfqs/:id/messages", async (req, res): Promise<void> => {
-  const userId = (req.session as any).userId;
+  const userId = getUserIdFromRequest(req);
   if (!userId) {
     res.status(401).json({ error: "Not authenticated" });
     return;
