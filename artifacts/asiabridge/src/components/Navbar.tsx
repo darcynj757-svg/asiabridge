@@ -8,33 +8,34 @@ export function Navbar() {
   const { language, setLanguage, t } = useLanguage();
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-dark border-b border-white/10">
+    <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            <span className="text-[#F7941D]">Asia</span>Bridge
+        <div className="flex items-center gap-8">
+          <Link href="/" className="text-xl font-bold tracking-tight flex items-center gap-1">
+            <span className="text-[#F7941D]">Asia</span>
+            <span className="text-[#0D1B2A]">Bridge</span>
           </Link>
-          
-          <nav className="hidden md:flex gap-4">
-            <Link href="/catalog" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+
+          <nav className="hidden md:flex gap-6">
+            <Link href="/catalog" className="text-sm font-medium text-gray-600 hover:text-[#0D1B2A] transition-colors">
               {t("nav.catalog")}
             </Link>
-            <Link href="/suppliers" className="text-sm font-medium text-white/70 hover:text-white transition-colors">
+            <Link href="/suppliers" className="text-sm font-medium text-gray-600 hover:text-[#0D1B2A] transition-colors">
               {t("nav.suppliers")}
             </Link>
           </nav>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex glass rounded-md p-1">
-            <button 
-              className={`px-2 py-1 text-xs font-semibold rounded transition-all ${language === 'ru' ? 'bg-[#F7941D] text-white shadow-sm' : 'text-white/60 hover:text-white'}`}
+        <div className="flex items-center gap-3">
+          <div className="flex border border-gray-200 rounded-lg overflow-hidden">
+            <button
+              className={`px-3 py-1.5 text-xs font-semibold transition-all ${language === 'ru' ? 'bg-[#F7941D] text-white' : 'text-gray-500 hover:text-gray-700 bg-white'}`}
               onClick={() => setLanguage('ru')}
             >
               RU
             </button>
-            <button 
-              className={`px-2 py-1 text-xs font-semibold rounded transition-all ${language === 'en' ? 'bg-[#F7941D] text-white shadow-sm' : 'text-white/60 hover:text-white'}`}
+            <button
+              className={`px-3 py-1.5 text-xs font-semibold transition-all ${language === 'en' ? 'bg-[#F7941D] text-white' : 'text-gray-500 hover:text-gray-700 bg-white'}`}
               onClick={() => setLanguage('en')}
             >
               EN
@@ -43,22 +44,24 @@ export function Navbar() {
 
           {user ? (
             <div className="flex items-center gap-2">
-              <Link href="/dashboard" className="text-sm font-medium text-white/70 hover:text-white transition-colors mr-2">
-                {t("nav.dashboard")}
+              <Link href="/dashboard">
+                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-[#0D1B2A]">
+                  {t("nav.dashboard")}
+                </Button>
               </Link>
-              <Button variant="outline" size="sm" onClick={logout} className="glass border-white/20 text-white hover:bg-white/10 hover:text-white">
-                Logout
+              <Button variant="outline" size="sm" onClick={logout} className="border-gray-300 text-gray-700">
+                {t("nav.logout")}
               </Button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link href="/login">
-                <Button variant="ghost" size="sm" className="text-white/80 hover:text-white hover:bg-white/10">
+                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-[#0D1B2A]">
                   {t("nav.login")}
                 </Button>
               </Link>
               <Link href="/register">
-                <Button size="sm" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white font-semibold shadow-lg shadow-orange-500/20 border-0">
+                <Button size="sm" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white font-semibold border-0 shadow-sm">
                   {t("nav.register")}
                 </Button>
               </Link>

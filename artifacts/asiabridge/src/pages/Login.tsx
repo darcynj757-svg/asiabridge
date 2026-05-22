@@ -8,12 +8,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useState } from "react";
 import { useLogin } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
+import { useLanguage } from "@/hooks/use-language";
 
 export default function Login() {
   const [, setLocation] = useLocation();
   const { refetchUser } = useAuth();
   const { toast } = useToast();
-  
+  const { t } = useLanguage();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -25,7 +27,7 @@ export default function Login() {
       },
       onError: (error: any) => {
         toast({
-          title: "Login failed",
+          title: t("login.error"),
           description: error.message || "Invalid credentials",
           variant: "destructive"
         });
@@ -41,17 +43,20 @@ export default function Login() {
   return (
     <Layout>
       <div className="flex-1 flex items-center justify-center p-4 bg-gray-50">
-        <Card className="w-full max-w-md shadow-lg border-border">
+        <Card className="w-full max-w-md shadow-lg border-gray-200">
           <CardHeader className="space-y-2 text-center pb-6">
-            <CardTitle className="text-3xl font-bold text-sidebar">Welcome back</CardTitle>
-            <CardDescription className="text-base">
-              Sign in to your AsiaBridge account
+            <div className="text-2xl font-bold mb-1">
+              <span className="text-[#F7941D]">Asia</span><span className="text-[#0D1B2A]">Bridge</span>
+            </div>
+            <CardTitle className="text-2xl font-bold text-[#0D1B2A]">{t("login.title")}</CardTitle>
+            <CardDescription className="text-base text-gray-500">
+              {t("login.subtitle")}
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-700">{t("login.email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -59,35 +64,33 @@ export default function Login() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12"
+                  className="h-11 border-gray-300 focus-visible:ring-[#F7941D]"
                 />
               </div>
               <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                </div>
+                <Label htmlFor="password" className="text-gray-700">{t("login.password")}</Label>
                 <Input
                   id="password"
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="h-12"
+                  className="h-11 border-gray-300 focus-visible:ring-[#F7941D]"
                 />
               </div>
-              <Button 
-                type="submit" 
-                className="w-full h-12 text-lg bg-primary text-primary-foreground hover:bg-primary/90" 
+              <Button
+                type="submit"
+                className="w-full h-11 text-base bg-[#F7941D] hover:bg-[#F7941D]/90 text-white border-0 font-semibold"
                 disabled={loginMutation.isPending}
               >
-                {loginMutation.isPending ? "Signing in..." : "Sign in"}
+                {loginMutation.isPending ? t("login.submitting") : t("login.submit")}
               </Button>
             </form>
-            
+
             <div className="mt-6 text-center text-sm">
-              <span className="text-muted-foreground">Don't have an account? </span>
-              <Link href="/register" className="text-primary hover:underline font-medium">
-                Register now
+              <span className="text-gray-500">{t("login.noAccount")} </span>
+              <Link href="/register" className="text-[#F7941D] hover:underline font-medium">
+                {t("login.register")}
               </Link>
             </div>
           </CardContent>

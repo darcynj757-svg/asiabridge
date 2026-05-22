@@ -39,31 +39,32 @@ export default function Home() {
   });
 
   const features = [
-    { icon: ShieldCheck, title: "Verified Partners", desc: "Rigorous vetting process for all suppliers and buyers." },
-    { icon: Truck, title: "Cross-border Logistics", desc: "End-to-end shipping solutions from Russia/CIS to SE Asia." },
-    { icon: Globe, title: "Full Deal Cycle", desc: "Manage RFQs, negotiations, and contracts in one place." },
-    { icon: FileText, title: "AsiaBridge Insurance", desc: "Cargo insurance to protect your investments during transit." },
-    { icon: CreditCard, title: "Factoring & Escrow", desc: "Secure payment terms and financial instruments." },
-    { icon: Scale, title: "Legal Support", desc: "Assistance with customs clearance and cross-border contracts." },
+    { icon: ShieldCheck, titleKey: "features.verified.title", descKey: "features.verified.desc" },
+    { icon: Truck, titleKey: "features.logistics.title", descKey: "features.logistics.desc" },
+    { icon: Globe, titleKey: "features.cycle.title", descKey: "features.cycle.desc" },
+    { icon: FileText, titleKey: "features.insurance.title", descKey: "features.insurance.desc" },
+    { icon: CreditCard, titleKey: "features.escrow.title", descKey: "features.escrow.desc" },
+    { icon: Scale, titleKey: "features.legal.title", descKey: "features.legal.desc" },
+  ];
+
+  const statsData = [
+    { labelKey: "stats.suppliers", value: stats?.totalSuppliers },
+    { labelKey: "stats.buyers", value: stats?.totalBuyers },
+    { labelKey: "stats.products", value: stats?.totalProducts },
+    { labelKey: "stats.deals", value: stats?.totalDeals },
   ];
 
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative h-[620px] w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-[580px] w-full flex items-center justify-center overflow-hidden">
         {SLIDES.map((slide, index) => (
           <div
             key={index}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/60 via-[#0D1B2A]/50 to-[#0a1628]/90 z-10" />
-            <img
-              src={slide.img}
-              alt={slide.alt}
-              className="w-full h-full object-cover object-center"
-            />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/65 via-[#0D1B2A]/55 to-[#0D1B2A]/80 z-10" />
+            <img src={slide.img} alt={slide.alt} className="w-full h-full object-cover object-center" />
           </div>
         ))}
 
@@ -73,123 +74,116 @@ export default function Home() {
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'w-2 bg-white/40 hover:bg-white/70'}`}
+              className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'w-2 bg-white/50 hover:bg-white/80'}`}
             />
           ))}
         </div>
-        
+
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
             {t("hero.title")}
           </h1>
-          <p className="text-lg md:text-2xl text-white/80 mb-10 max-w-3xl mx-auto font-medium">
+          <p className="text-lg md:text-xl text-white/85 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
             {t("hero.subtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/catalog">
-              <Button size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white text-lg h-14 px-8 font-semibold w-full sm:w-auto shadow-xl shadow-orange-500/30 border-0">
+              <Button size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white text-base h-13 px-8 font-semibold w-full sm:w-auto shadow-xl shadow-orange-500/30 border-0">
                 {t("hero.cta")}
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="lg" className="glass text-white text-lg h-14 px-8 font-semibold w-full sm:w-auto hover:bg-white/15 border-white/30">
-                Become a Partner
+              <Button size="lg" variant="outline" className="border-white/60 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm text-base h-13 px-8 font-semibold w-full sm:w-auto">
+                {t("hero.partner")}
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Stats Section — transparent, glass cards */}
-      <section className="py-14 border-b border-white/8">
+      {/* Stats Section — белый фон, яркие карточки */}
+      <section className="py-12 bg-white border-b border-gray-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {[
-              { label: "Suppliers", value: stats?.totalSuppliers },
-              { label: "Buyers", value: stats?.totalBuyers },
-              { label: "Products", value: stats?.totalProducts },
-              { label: "Deals Closed", value: stats?.totalDeals },
-            ].map(({ label, value }) => (
-              <div key={label} className="glass rounded-2xl p-6 text-center space-y-2">
-                <div className="text-4xl font-black text-[#F7941D]">
-                  {statsLoading ? <Skeleton className="h-10 w-20 mx-auto bg-white/10" /> : value || 0}
+            {statsData.map(({ labelKey, value }) => (
+              <div key={labelKey} className="bg-[#0D1B2A] rounded-2xl p-6 text-center space-y-2 shadow-lg">
+                <div className="text-4xl md:text-5xl font-black text-[#F7941D]">
+                  {statsLoading ? <Skeleton className="h-12 w-16 mx-auto bg-white/10" /> : value ?? 0}
                 </div>
-                <div className="text-sm font-semibold text-white uppercase tracking-widest">{label}</div>
+                <div className="text-xs font-bold text-white uppercase tracking-widest">{t(labelKey)}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories Section — transparent background */}
-      <section className="py-20">
+      {/* Categories Section */}
+      <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-3xl font-bold text-white mb-4">Browse by Category</h2>
-              <p className="text-white/50 max-w-2xl">Discover industrial supplies and commodities from top manufacturers.</p>
+              <h2 className="text-3xl font-bold text-[#0D1B2A] mb-3">{t("categories.title")}</h2>
+              <p className="text-gray-500 max-w-xl">{t("categories.subtitle")}</p>
             </div>
-            <Link href="/catalog">
-              <Button variant="ghost" className="text-[#F7941D] hover:text-[#F7941D]/80 hover:bg-[#F7941D]/10 hidden sm:flex">
-                View All <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+            <Link href="/catalog" className="hidden sm:flex items-center gap-1 text-[#F7941D] hover:text-[#F7941D]/80 font-medium text-sm transition-colors">
+              {t("categories.viewAll")} <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {categoriesLoading ? (
               Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-32 w-full rounded-xl bg-white/5" />
+                <Skeleton key={i} className="h-28 w-full rounded-xl" />
               ))
             ) : categories?.length ? (
               categories.map((cat, i) => (
                 <Link key={i} href={`/catalog?category=${encodeURIComponent(cat.name)}`}>
-                  <div className="glass rounded-xl p-6 h-full cursor-pointer group hover:border-[#F7941D]/40 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-200">
-                    <h3 className="font-semibold text-lg text-white group-hover:text-[#F7941D] transition-colors line-clamp-2">
+                  <div className="bg-white rounded-xl p-5 border border-gray-200 cursor-pointer group hover:border-[#F7941D] hover:shadow-md transition-all duration-200">
+                    <h3 className="font-semibold text-base text-[#0D1B2A] group-hover:text-[#F7941D] transition-colors line-clamp-2">
                       {cat.name}
                     </h3>
-                    <p className="text-sm text-white/40 mt-3">
-                      {cat.count} products
+                    <p className="text-sm text-gray-400 mt-2">
+                      {cat.count} {t("categories.products")}
                     </p>
                   </div>
                 </Link>
               ))
             ) : (
-              <div className="col-span-full text-center py-10 text-white/40">
-                No categories available.
+              <div className="col-span-full text-center py-10 text-gray-400">
+                {t("categories.empty")}
               </div>
             )}
           </div>
-          
+
           <div className="mt-8 flex justify-center sm:hidden">
             <Link href="/catalog">
-              <Button variant="outline" className="glass border-white/20 text-white hover:bg-white/10 w-full">
-                View All Categories
+              <Button variant="outline" className="w-full border-[#F7941D] text-[#F7941D]">
+                {t("categories.viewAll")}
               </Button>
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Features Section — transparent, glass cards with white text */}
-      <section className="py-20">
+      {/* Features Section */}
+      <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16 max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold text-white mb-4">Why AsiaBridge?</h2>
-            <p className="text-white/50">We provide a secure, end-to-end ecosystem for cross-border trade, eliminating risks and reducing friction.</p>
+          <div className="text-center mb-16 max-w-2xl mx-auto">
+            <h2 className="text-3xl font-bold text-[#0D1B2A] mb-4">{t("features.title")}</h2>
+            <p className="text-gray-500 leading-relaxed">{t("features.subtitle")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, i) => (
-              <div key={i} className="glass rounded-2xl p-6 flex gap-4 group hover:border-[#F7941D]/30 hover:shadow-lg hover:shadow-orange-500/10 transition-all duration-200">
-                <div className="flex-shrink-0 mt-1">
-                  <div className="w-12 h-12 rounded-xl glass-orange flex items-center justify-center text-[#F7941D]">
+              <div key={i} className="flex gap-4 p-6 rounded-2xl border border-gray-200 bg-white hover:border-[#F7941D]/40 hover:shadow-md group transition-all duration-200">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#F7941D]/10 flex items-center justify-center text-[#F7941D]">
                     <feature.icon className="h-6 w-6" />
                   </div>
                 </div>
                 <div>
-                  <h3 className="font-bold text-white mb-2 group-hover:text-[#F7941D] transition-colors">{feature.title}</h3>
-                  <p className="text-sm text-white/60 leading-relaxed">{feature.desc}</p>
+                  <h3 className="font-bold text-[#0D1B2A] mb-2 group-hover:text-[#F7941D] transition-colors">{t(feature.titleKey)}</h3>
+                  <p className="text-sm text-gray-500 leading-relaxed">{t(feature.descKey)}</p>
                 </div>
               </div>
             ))}

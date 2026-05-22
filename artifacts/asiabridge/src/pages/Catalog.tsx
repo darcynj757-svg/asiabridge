@@ -13,11 +13,11 @@ export default function Catalog() {
   const { t } = useLanguage();
   const [, setLocation] = useLocation();
   const searchParams = new URLSearchParams(window.location.search);
-  
+
   const category = searchParams.get("category") || "";
   const country = searchParams.get("country") || "";
   const search = searchParams.get("search") || "";
-  
+
   const [searchInput, setSearchInput] = useState(search);
 
   const { data: products, isLoading: productsLoading } = useListProducts(
@@ -53,46 +53,46 @@ export default function Catalog() {
       {/* Header bar */}
       <div className="bg-[#0D1B2A] py-8 border-b border-white/10">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-white mb-6">{t("catalog.title") || "Product Catalog"}</h1>
-          
+          <h1 className="text-3xl font-bold text-white mb-6">{t("catalog.title")}</h1>
           <form onSubmit={handleSearch} className="flex gap-2">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 h-5 w-5" />
-              <Input 
-                type="search" 
-                placeholder="Search products by name, description..." 
-                className="pl-10 h-12 glass border-white/20 text-white placeholder:text-white/30 focus-visible:ring-[#F7941D] focus-visible:border-[#F7941D]/50 bg-transparent"
+              <Input
+                type="search"
+                placeholder={t("catalog.search.placeholder")}
+                className="pl-10 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/30 focus-visible:ring-[#F7941D]"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
               />
             </div>
-            <Button type="submit" size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white h-12 px-8 font-semibold border-0 shadow-lg shadow-orange-500/20">
-              Search
+            <Button type="submit" size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white h-12 px-8 font-semibold border-0">
+              {t("catalog.search.btn")}
             </Button>
           </form>
         </div>
       </div>
 
-      <div className="bg-[#0D1B2A] min-h-screen">
+      {/* Content */}
+      <div className="bg-white min-h-screen">
         <div className="container mx-auto px-4 py-8">
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Filters Sidebar */}
-            <aside className="w-full lg:w-64 shrink-0 space-y-6">
-              <div className="glass rounded-xl p-6">
+            <aside className="w-full lg:w-64 shrink-0">
+              <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
                 <div className="flex items-center gap-2 mb-5">
                   <Filter className="h-5 w-5 text-[#F7941D]" />
-                  <h2 className="font-semibold text-white text-lg">Filters</h2>
+                  <h2 className="font-semibold text-[#0D1B2A] text-lg">{t("catalog.filters")}</h2>
                 </div>
-                
+
                 <div className="space-y-6">
-                  <div className="space-y-3">
-                    <label className="text-sm font-medium text-white/60">Category</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">{t("catalog.category")}</label>
                     <Select value={category || "all"} onValueChange={(val) => updateFilter("category", val)}>
-                      <SelectTrigger className="w-full glass border-white/20 text-white bg-transparent focus:ring-[#F7941D]">
-                        <SelectValue placeholder="All Categories" />
+                      <SelectTrigger className="w-full border-gray-200 focus:ring-[#F7941D]">
+                        <SelectValue placeholder={t("catalog.category.all")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Categories</SelectItem>
+                        <SelectItem value="all">{t("catalog.category.all")}</SelectItem>
                         {categories?.map(cat => (
                           <SelectItem key={cat.name} value={cat.name}>{cat.name}</SelectItem>
                         ))}
@@ -100,17 +100,17 @@ export default function Catalog() {
                     </Select>
                   </div>
 
-                  <div className="space-y-3">
-                    <label className="text-sm font-medium text-white/60">Origin Country</label>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">{t("catalog.country")}</label>
                     <Select value={country || "all"} onValueChange={(val) => updateFilter("country", val)}>
-                      <SelectTrigger className="w-full glass border-white/20 text-white bg-transparent focus:ring-[#F7941D]">
-                        <SelectValue placeholder="All Countries" />
+                      <SelectTrigger className="w-full border-gray-200 focus:ring-[#F7941D]">
+                        <SelectValue placeholder={t("catalog.country.all")} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All Countries</SelectItem>
-                        <SelectItem value="Russia">Russia</SelectItem>
-                        <SelectItem value="Belarus">Belarus</SelectItem>
-                        <SelectItem value="Kazakhstan">Kazakhstan</SelectItem>
+                        <SelectItem value="all">{t("catalog.country.all")}</SelectItem>
+                        <SelectItem value="Russia">Россия / Russia</SelectItem>
+                        <SelectItem value="Belarus">Беларусь / Belarus</SelectItem>
+                        <SelectItem value="Kazakhstan">Казахстан / Kazakhstan</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -120,12 +120,12 @@ export default function Catalog() {
 
             {/* Product Grid */}
             <main className="flex-1">
-              <div className="mb-6 flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-white/80">
+              <div className="mb-6">
+                <h2 className="text-lg font-semibold text-gray-700">
                   {productsLoading ? (
-                    <Skeleton className="h-6 w-32 bg-white/10" />
+                    <Skeleton className="h-6 w-36" />
                   ) : (
-                    <><span className="text-[#F7941D] font-bold">{products?.length || 0}</span> Products Found</>
+                    <><span className="text-[#F7941D] font-bold text-xl">{products?.length ?? 0}</span> {t("catalog.found")}</>
                   )}
                 </h2>
               </div>
@@ -133,53 +133,51 @@ export default function Catalog() {
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
                 {productsLoading ? (
                   Array.from({ length: 6 }).map((_, i) => (
-                    <Skeleton key={i} className="h-96 w-full rounded-xl bg-white/5" />
+                    <Skeleton key={i} className="h-96 w-full rounded-xl" />
                   ))
                 ) : products?.length ? (
                   products.map((product) => (
                     <Link key={product.id} href={`/products/${product.id}`}>
-                      <div className="glass rounded-xl overflow-hidden cursor-pointer group hover:border-[#F7941D]/40 hover:shadow-xl hover:shadow-orange-500/10 transition-all duration-200 h-full flex flex-col">
-                        <div className="aspect-[4/3] bg-white/5 relative overflow-hidden">
+                      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden cursor-pointer group hover:border-[#F7941D]/60 hover:shadow-lg transition-all duration-200 h-full flex flex-col">
+                        <div className="aspect-[4/3] bg-gray-100 relative overflow-hidden">
                           {product.images?.[0] ? (
-                            <img 
-                              src={product.images[0]} 
+                            <img
+                              src={product.images[0]}
                               alt={product.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-white/20">
+                            <div className="w-full h-full flex items-center justify-center text-gray-300">
                               <Package className="h-12 w-12" />
                             </div>
                           )}
                           <div className="absolute top-2 right-2">
-                            <span className="glass text-white text-xs font-semibold px-2.5 py-1 rounded-md">
+                            <span className="bg-white/95 text-[#0D1B2A] text-xs font-semibold px-2.5 py-1 rounded-md shadow-sm">
                               {product.category}
                             </span>
                           </div>
                         </div>
                         <div className="p-5 flex-1 flex flex-col">
-                          <h3 className="font-bold text-lg text-white group-hover:text-[#F7941D] transition-colors line-clamp-2 mb-2">
+                          <h3 className="font-bold text-base text-[#0D1B2A] group-hover:text-[#F7941D] transition-colors line-clamp-2 mb-2">
                             {product.title}
                           </h3>
-                          
-                          <div className="text-xl font-bold text-[#F7941D] mb-4">
+
+                          <div className="text-xl font-bold text-[#F7941D] mb-3">
                             {product.price.toLocaleString()} {product.currency}
-                            <span className="text-sm font-normal text-white/40 ml-1">
-                              / {product.unit}
-                            </span>
+                            <span className="text-sm font-normal text-gray-400 ml-1">/ {product.unit}</span>
                           </div>
 
-                          <div className="space-y-2 text-sm text-white/50 mt-auto">
+                          <div className="space-y-1.5 text-sm text-gray-500 mt-auto">
                             <div className="flex items-center gap-2">
-                              <Package className="h-4 w-4 text-white/30" />
-                              <span>MOQ: <span className="font-medium text-white/70">{product.moq} {product.unit}</span></span>
+                              <Package className="h-4 w-4 text-gray-400 shrink-0" />
+                              <span>{t("catalog.moq")}: <span className="font-medium text-gray-700">{product.moq} {product.unit}</span></span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <Building2 className="h-4 w-4 text-white/30" />
+                              <Building2 className="h-4 w-4 text-gray-400 shrink-0" />
                               <span className="truncate">{product.supplierName}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <MapPin className="h-4 w-4 text-white/30" />
+                              <MapPin className="h-4 w-4 text-gray-400 shrink-0" />
                               <span>{product.originCountry}</span>
                             </div>
                           </div>
@@ -189,11 +187,11 @@ export default function Catalog() {
                   ))
                 ) : (
                   <div className="col-span-full py-20 text-center">
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full glass mb-4">
-                      <Search className="h-8 w-8 text-white/40" />
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4">
+                      <Search className="h-8 w-8 text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">No products found</h3>
-                    <p className="text-white/40">Try adjusting your search or filters to find what you're looking for.</p>
+                    <h3 className="text-xl font-semibold text-[#0D1B2A] mb-2">{t("catalog.empty.title")}</h3>
+                    <p className="text-gray-400">{t("catalog.empty.desc")}</p>
                   </div>
                 )}
               </div>
