@@ -108,9 +108,16 @@ export default function Catalog() {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">{t("catalog.country.all")}</SelectItem>
-                        <SelectItem value="Russia">Россия / Russia</SelectItem>
-                        <SelectItem value="Belarus">Беларусь / Belarus</SelectItem>
-                        <SelectItem value="Kazakhstan">Казахстан / Kazakhstan</SelectItem>
+                        <SelectItem value="Россия">🇷🇺 Россия</SelectItem>
+                        <SelectItem value="Казахстан">🇰🇿 Казахстан</SelectItem>
+                        <SelectItem value="Узбекистан">🇺🇿 Узбекистан</SelectItem>
+                        <SelectItem value="Беларусь">🇧🇾 Беларусь</SelectItem>
+                        <SelectItem value="Вьетнам">🇻🇳 Вьетнам</SelectItem>
+                        <SelectItem value="Таиланд">🇹🇭 Таиланд</SelectItem>
+                        <SelectItem value="Индонезия">🇮🇩 Индонезия</SelectItem>
+                        <SelectItem value="Малайзия">🇲🇾 Малайзия</SelectItem>
+                        <SelectItem value="Филиппины">🇵🇭 Филиппины</SelectItem>
+                        <SelectItem value="Сингапур">🇸🇬 Сингапур</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

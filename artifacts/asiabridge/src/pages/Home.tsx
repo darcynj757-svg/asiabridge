@@ -128,6 +128,41 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Trade Direction Section */}
+      <section className="py-16 bg-[#0D1B2A]">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-10">
+            <h2 className="text-3xl font-bold text-white mb-3">Торговля Россия ↔ АСЕАН</h2>
+            <p className="text-white/60 max-w-2xl mx-auto">Прямые поставки между Россией, СНГ и странами Юго-Восточной Азии без посредников</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            <div className="rounded-2xl overflow-hidden relative group cursor-pointer" onClick={() => window.location.href = '/catalog?country=Россия'}>
+              <img src="https://images.unsplash.com/photo-1513326738677-b964603b136d?w=600&h=300&fit=crop&auto=format" alt="Россия и СНГ" className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A]/90 via-[#0D1B2A]/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="text-xs font-bold text-[#F7941D] uppercase tracking-widest mb-1">Экспортёры</div>
+                <h3 className="text-xl font-bold text-white mb-1">Россия и СНГ → АСЕАН</h3>
+                <p className="text-white/70 text-sm">Металл, зерно, удобрения, лес, химия, текстиль</p>
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden relative group cursor-pointer" onClick={() => window.location.href = '/catalog?country=Вьетнам'}>
+              <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&h=300&fit=crop&auto=format" alt="АСЕАН страны" className="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A]/90 via-[#0D1B2A]/40 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-5">
+                <div className="text-xs font-bold text-[#F7941D] uppercase tracking-widest mb-1">Импортёры</div>
+                <h3 className="text-xl font-bold text-white mb-1">АСЕАН → Россия</h3>
+                <p className="text-white/70 text-sm">Кофе, каучук, пальмовое масло, морепродукты, рис</p>
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-wrap justify-center gap-3 mt-8">
+            {['🇻🇳 Вьетнам','🇹🇭 Таиланд','🇮🇩 Индонезия','🇲🇾 Малайзия','🇵🇭 Филиппины','🇸🇬 Сингапур','🇰🇭 Камбоджа','🇲🇲 Мьянма'].map(c => (
+              <span key={c} className="bg-white/10 border border-white/20 text-white/80 text-sm px-3 py-1.5 rounded-full">{c}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Categories Section */}
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -144,21 +179,32 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {categoriesLoading ? (
               Array.from({ length: 8 }).map((_, i) => (
-                <Skeleton key={i} className="h-28 w-full rounded-xl" />
+                <Skeleton key={i} className="h-44 w-full rounded-xl" />
               ))
             ) : categories?.length ? (
-              categories.map((cat, i) => (
-                <Link key={i} href={`/catalog?category=${encodeURIComponent(cat.name)}`}>
-                  <div className="bg-white rounded-xl p-5 border border-gray-200 cursor-pointer group hover:border-[#F7941D] hover:shadow-md transition-all duration-200">
-                    <h3 className="font-semibold text-base text-[#0D1B2A] group-hover:text-[#F7941D] transition-colors line-clamp-2">
-                      {cat.name}
-                    </h3>
-                    <p className="text-sm text-gray-400 mt-2">
-                      {cat.count} {t("categories.products")}
-                    </p>
-                  </div>
-                </Link>
-              ))
+              categories.map((cat, i) => {
+                const catImages: Record<string, string> = {
+                  metals: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=400&h=220&fit=crop&auto=format',
+                  wood: 'https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=400&h=220&fit=crop&auto=format',
+                  food: 'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=400&h=220&fit=crop&auto=format',
+                  chemicals: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&h=220&fit=crop&auto=format',
+                  textiles: 'https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&h=220&fit=crop&auto=format',
+                  energy: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=400&h=220&fit=crop&auto=format',
+                };
+                const img = catImages[cat.name] || 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=220&fit=crop&auto=format';
+                return (
+                  <Link key={i} href={`/catalog?category=${encodeURIComponent(cat.name)}`}>
+                    <div className="rounded-xl overflow-hidden border border-gray-200 cursor-pointer group hover:border-[#F7941D] hover:shadow-lg transition-all duration-200 relative">
+                      <img src={img} alt={cat.name} className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#0D1B2A]/80 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-3">
+                        <h3 className="font-semibold text-sm text-white group-hover:text-[#F7941D] transition-colors capitalize">{cat.name}</h3>
+                        <p className="text-xs text-white/70 mt-0.5">{cat.count} {t("categories.products")}</p>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })
             ) : (
               <div className="col-span-full text-center py-10 text-gray-400">
                 {t("categories.empty")}
