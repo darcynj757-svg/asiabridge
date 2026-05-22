@@ -9,6 +9,8 @@ import { logger } from "./lib/logger";
 
 const app: Express = express();
 
+app.set("trust proxy", 1);
+
 app.use(
   pinoHttp({
     logger,
@@ -29,9 +31,21 @@ app.use(
   }),
 );
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim())
+  : null;
+
 app.use(
   cors({
-    origin: true,
+    origin: allowedOrigins
+      ? (origin, callback) => {
+          if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+          } else {
+            callback(new Error(`CORS: origin ${origin} not allowed`));
+          }
+        }
+      : true,
     credentials: true,
   }),
 );
@@ -40,6 +54,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 const PgSession = connectPgSimple(session);
+
+const isProduction = process.env.NODE_ENV === "production";
 
 app.use(
   session({
@@ -52,7 +68,8 @@ app.use(
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: "lax",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     },
   }),
 );
