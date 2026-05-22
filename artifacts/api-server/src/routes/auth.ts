@@ -13,7 +13,7 @@ const COOKIE_MAX_AGE = 30 * 24 * 60 * 60 * 1000;
 
 const behindHttpsProxy = !!(process.env.REPLIT_DEV_DOMAIN || process.env.NODE_ENV === "production");
 
-function setCookie(res: any, userId: number) {
+function setCookie(res: any, userId: number): string {
   const token = jwt.sign({ userId }, JWT_SECRET, { expiresIn: "30d" });
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
@@ -22,6 +22,7 @@ function setCookie(res: any, userId: number) {
     maxAge: COOKIE_MAX_AGE,
     path: "/",
   });
+  return token;
 }
 
 function clearCookie(res: any) {
@@ -34,14 +35,24 @@ function clearCookie(res: any) {
 }
 
 export function getUserIdFromRequest(req: any): number | null {
-  const token = req.cookies?.[COOKIE_NAME];
-  if (!token) return null;
-  try {
-    const payload = jwt.verify(token, JWT_SECRET) as { userId: number };
-    return payload.userId;
-  } catch {
-    return null;
+  const cookieToken = req.cookies?.[COOKIE_NAME];
+  if (cookieToken) {
+    try {
+      const payload = jwt.verify(cookieToken, JWT_SECRET) as { userId: number };
+      return payload.userId;
+    } catch {}
   }
+
+  const auth: string | undefined = req.headers?.authorization;
+  if (auth?.startsWith("Bearer ")) {
+    const bearerToken = auth.slice(7);
+    try {
+      const payload = jwt.verify(bearerToken, JWT_SECRET) as { userId: number };
+      return payload.userId;
+    } catch {}
+  }
+
+  return null;
 }
 
 function serializeUser(user: typeof usersTable.$inferSelect) {
@@ -82,8 +93,8 @@ router.post("/auth/register", async (req, res): Promise<void> => {
     .values({ email, passwordHash, role, companyName, country, category })
     .returning();
 
-  setCookie(res, user.id);
-  res.status(201).json(serializeUser(user));
+  const token = setCookie(res, user.id);
+  res.status(201).json({ ...serializeUser(user), token });
 });
 
 router.post("/auth/login", async (req, res): Promise<void> => {
@@ -107,8 +118,8 @@ router.post("/auth/login", async (req, res): Promise<void> => {
     return;
   }
 
-  setCookie(res, user.id);
-  res.json(serializeUser(user));
+  const token = setCookie(res, user.id);
+  res.json({ ...serializeUser(user), token });
 });
 
 router.post("/auth/logout", async (req, res): Promise<void> => {

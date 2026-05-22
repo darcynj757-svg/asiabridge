@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   });
 
   const logout = () => {
+    localStorage.removeItem("ab_token");
     logoutMutation.mutate();
   };
 

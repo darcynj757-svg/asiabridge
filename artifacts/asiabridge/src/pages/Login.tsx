@@ -21,7 +21,8 @@ export default function Login() {
 
   const loginMutation = useLogin({
     mutation: {
-      onSuccess: async () => {
+      onSuccess: async (data: any) => {
+        if (data?.token) localStorage.setItem("ab_token", data.token);
         await refetchUser();
         setLocation("/dashboard");
       },
