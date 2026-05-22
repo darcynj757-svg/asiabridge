@@ -86,6 +86,8 @@ const translations: Translations = {
   "login.noAccount": { ru: "Нет аккаунта?", en: "Don't have an account?" },
   "login.register": { ru: "Зарегистрироваться", en: "Register now" },
   "login.error": { ru: "Ошибка входа", en: "Login failed" },
+  "login.invalidCredentials": { ru: "Неверный email или пароль", en: "Invalid email or password" },
+  "login.serverError": { ru: "Ошибка сервера. Попробуйте позже", en: "Server error. Please try again later" },
 
   // Register
   "register.title": { ru: "Создать аккаунт", en: "Create Account" },
@@ -108,6 +110,8 @@ const translations: Translations = {
   "register.hasAccount": { ru: "Уже есть аккаунт?", en: "Already have an account?" },
   "register.login": { ru: "Войти", en: "Sign in" },
   "register.error": { ru: "Ошибка регистрации", en: "Registration failed" },
+  "register.emailTaken": { ru: "Этот email уже зарегистрирован", en: "This email is already registered" },
+  "register.serverError": { ru: "Ошибка сервера. Попробуйте позже", en: "Server error. Please try again later" },
 
   // Dashboard
   "dashboard.title": { ru: "Личный кабинет", en: "Dashboard" },

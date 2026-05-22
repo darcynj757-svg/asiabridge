@@ -26,9 +26,13 @@ export default function Login() {
         setLocation("/dashboard");
       },
       onError: (error: any) => {
+        const description =
+          error.status === 401
+            ? t("login.invalidCredentials")
+            : t("login.serverError");
         toast({
           title: t("login.error"),
-          description: error.message || "Invalid credentials",
+          description,
           variant: "destructive"
         });
       }

@@ -32,9 +32,13 @@ export default function Register() {
         setLocation("/dashboard");
       },
       onError: (error: any) => {
+        const description =
+          error.status === 400
+            ? t("register.emailTaken")
+            : t("register.serverError");
         toast({
           title: t("register.error"),
-          description: error.message || "Something went wrong",
+          description,
           variant: "destructive"
         });
       }
