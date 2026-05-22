@@ -3,13 +3,28 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: AsiaBridge B2B API specification
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: auth
+    description: Authentication operations
+  - name: products
+    description: Product catalog
+  - name: rfqs
+    description: Request for Quotations
+  - name: messages
+    description: Chat messages
+  - name: favorites
+    description: Buyer favorites
+  - name: users
+    description: User profiles
+  - name: stats
+    description: Platform statistics
+
 paths:
   /healthz:
     get:
@@ -24,6 +39,434 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /auth/register:
+    post:
+      operationId: register
+      tags: [auth]
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterInput"
+      responses:
+        "201":
+          description: User registered
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Validation error
+
+  /auth/login:
+    post:
+      operationId: login
+      tags: [auth]
+      summary: Login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginInput"
+      responses:
+        "200":
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Invalid credentials
+
+  /auth/logout:
+    post:
+      operationId: logout
+      tags: [auth]
+      summary: Logout
+      responses:
+        "200":
+          description: Logged out
+
+  /auth/me:
+    get:
+      operationId: getMe
+      tags: [auth]
+      summary: Get current user
+      responses:
+        "200":
+          description: Current user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Not authenticated
+
+  /products:
+    get:
+      operationId: listProducts
+      tags: [products]
+      summary: List products
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+        - name: country
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: minPrice
+          in: query
+          schema:
+            type: number
+        - name: maxPrice
+          in: query
+          schema:
+            type: number
+        - name: supplierId
+          in: query
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+    post:
+      operationId: createProduct
+      tags: [products]
+      summary: Create a product (supplier only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductInput"
+      responses:
+        "201":
+          description: Product created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /products/{id}:
+    get:
+      operationId: getProduct
+      tags: [products]
+      summary: Get product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateProduct
+      tags: [products]
+      summary: Update a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProductUpdate"
+      responses:
+        "200":
+          description: Updated product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+    delete:
+      operationId: deleteProduct
+      tags: [products]
+      summary: Delete a product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /rfqs:
+    get:
+      operationId: listRfqs
+      tags: [rfqs]
+      summary: List RFQs for current user
+      responses:
+        "200":
+          description: List of RFQs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Rfq"
+
+    post:
+      operationId: createRfq
+      tags: [rfqs]
+      summary: Create an RFQ
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RfqInput"
+      responses:
+        "201":
+          description: RFQ created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rfq"
+
+  /rfqs/{id}:
+    get:
+      operationId: getRfq
+      tags: [rfqs]
+      summary: Get RFQ by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: RFQ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rfq"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateRfq
+      tags: [rfqs]
+      summary: Update RFQ status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RfqUpdate"
+      responses:
+        "200":
+          description: Updated RFQ
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Rfq"
+
+  /rfqs/{id}/messages:
+    get:
+      operationId: listMessages
+      tags: [messages]
+      summary: Get messages for an RFQ
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+
+    post:
+      operationId: createMessage
+      tags: [messages]
+      summary: Send a message in an RFQ
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MessageInput"
+      responses:
+        "201":
+          description: Message created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+
+  /favorites:
+    get:
+      operationId: listFavorites
+      tags: [favorites]
+      summary: List favorites for buyer
+      responses:
+        "200":
+          description: Favorites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favorite"
+
+    post:
+      operationId: addFavorite
+      tags: [favorites]
+      summary: Add a product to favorites
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FavoriteInput"
+      responses:
+        "201":
+          description: Added to favorites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favorite"
+
+  /favorites/{productId}:
+    delete:
+      operationId: removeFavorite
+      tags: [favorites]
+      summary: Remove product from favorites
+      parameters:
+        - name: productId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Removed
+
+  /users/{id}:
+    get:
+      operationId: getUser
+      tags: [users]
+      summary: Get user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: User
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Not found
+
+    patch:
+      operationId: updateUser
+      tags: [users]
+      summary: Update user profile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserUpdate"
+      responses:
+        "200":
+          description: Updated user
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Get platform statistics
+      responses:
+        "200":
+          description: Platform stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlatformStats"
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [stats]
+      summary: List categories with product counts
+      responses:
+        "200":
+          description: Categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +477,289 @@ components:
       required:
         - status
 
+    User:
+      type: object
+      required: [id, email, role, createdAt]
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        role:
+          type: string
+          enum: [supplier, buyer, admin]
+        companyName:
+          type: ["string", "null"]
+        companyDescription:
+          type: ["string", "null"]
+        country:
+          type: ["string", "null"]
+        category:
+          type: ["string", "null"]
+        logoUrl:
+          type: ["string", "null"]
+        contactPhone:
+          type: ["string", "null"]
+        contactWebsite:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+
+    RegisterInput:
+      type: object
+      required: [email, password, role]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+          enum: [supplier, buyer]
+        companyName:
+          type: string
+        country:
+          type: string
+        category:
+          type: string
+
+    LoginInput:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+
+    Product:
+      type: object
+      required: [id, supplierId, title, price, currency, moq, unit, category, originCountry, status, createdAt]
+      properties:
+        id:
+          type: integer
+        supplierId:
+          type: integer
+        supplierName:
+          type: ["string", "null"]
+        supplierCountry:
+          type: ["string", "null"]
+        title:
+          type: string
+        description:
+          type: ["string", "null"]
+        price:
+          type: number
+        currency:
+          type: string
+        moq:
+          type: number
+        unit:
+          type: string
+        category:
+          type: string
+        originCountry:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        certificates:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [active, hidden]
+        createdAt:
+          type: string
+
+    ProductInput:
+      type: object
+      required: [title, price, currency, moq, unit, category, originCountry]
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        moq:
+          type: number
+        unit:
+          type: string
+        category:
+          type: string
+        originCountry:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        certificates:
+          type: string
+
+    ProductUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        currency:
+          type: string
+        moq:
+          type: number
+        unit:
+          type: string
+        category:
+          type: string
+        originCountry:
+          type: string
+        images:
+          type: array
+          items:
+            type: string
+        certificates:
+          type: string
+        status:
+          type: string
+          enum: [active, hidden]
+
+    Rfq:
+      type: object
+      required: [id, buyerId, productId, supplierId, status, createdAt]
+      properties:
+        id:
+          type: integer
+        buyerId:
+          type: integer
+        productId:
+          type: integer
+        supplierId:
+          type: integer
+        productTitle:
+          type: ["string", "null"]
+        buyerName:
+          type: ["string", "null"]
+        supplierName:
+          type: ["string", "null"]
+        quantity:
+          type: ["number", "null"]
+        message:
+          type: ["string", "null"]
+        status:
+          type: string
+          enum: [new, quoted, negotiating, contracted, shipped]
+        createdAt:
+          type: string
+
+    RfqInput:
+      type: object
+      required: [productId, supplierId]
+      properties:
+        productId:
+          type: integer
+        supplierId:
+          type: integer
+        quantity:
+          type: number
+        message:
+          type: string
+
+    RfqUpdate:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [new, quoted, negotiating, contracted, shipped]
+
+    Message:
+      type: object
+      required: [id, rfqId, senderId, content, createdAt]
+      properties:
+        id:
+          type: integer
+        rfqId:
+          type: integer
+        senderId:
+          type: integer
+        senderName:
+          type: ["string", "null"]
+        senderRole:
+          type: ["string", "null"]
+        content:
+          type: string
+        createdAt:
+          type: string
+
+    MessageInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+
+    Favorite:
+      type: object
+      required: [id, buyerId, productId, createdAt]
+      properties:
+        id:
+          type: integer
+        buyerId:
+          type: integer
+        productId:
+          type: integer
+        product:
+          $ref: "#/components/schemas/Product"
+        createdAt:
+          type: string
+
+    FavoriteInput:
+      type: object
+      required: [productId]
+      properties:
+        productId:
+          type: integer
+
+    UserUpdate:
+      type: object
+      properties:
+        companyName:
+          type: string
+        companyDescription:
+          type: string
+        country:
+          type: string
+        category:
+          type: string
+        logoUrl:
+          type: string
+        contactPhone:
+          type: string
+        contactWebsite:
+          type: string
+
+    PlatformStats:
+      type: object
+      required: [totalSuppliers, totalBuyers, totalProducts, totalDeals]
+      properties:
+        totalSuppliers:
+          type: integer
+        totalBuyers:
+          type: integer
+        totalProducts:
+          type: integer
+        totalDeals:
+          type: integer
+
+    Category:
+      type: object
+      required: [name, count]
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
