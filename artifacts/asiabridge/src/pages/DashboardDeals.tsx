@@ -3,10 +3,10 @@ import { useListRfqs, getListRfqsQueryKey } from "@workspace/api-client-react";
 import { useAuth } from "@/hooks/use-auth";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
+import { Handshake } from "lucide-react";
 import { useState } from "react";
 
-type StatusFilter = "all" | "new" | "quoted" | "negotiating" | "contracted" | "shipped";
+type StatusFilter = "all" | "negotiating" | "contracted" | "shipped";
 
 const STATUS_LABELS: Record<string, string> = {
   new: "New",
@@ -24,7 +24,7 @@ const STATUS_COLORS: Record<string, string> = {
   shipped: "bg-gray-100 text-gray-700",
 };
 
-export default function DashboardRfqs() {
+export default function DashboardDeals() {
   const { user } = useAuth();
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
@@ -32,20 +32,17 @@ export default function DashboardRfqs() {
     query: { queryKey: getListRfqsQueryKey() }
   });
 
-  const filtered = (rfqs ?? []).filter((r) => statusFilter === "all" || r.status === statusFilter);
-
-  const isSupplier = user?.role === "supplier";
+  const deals = (rfqs ?? []).filter((r) => {
+    if (statusFilter === "all") return ["negotiating", "contracted", "shipped"].includes(r.status);
+    return r.status === statusFilter;
+  });
 
   return (
     <DashboardLayout>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-[#0D1B2A]">
-            {isSupplier ? "Received RFQs" : "My RFQs"}
-          </h1>
-          <p className="text-sm text-gray-500 mt-0.5">
-            {isSupplier ? "View and respond to buyer inquiries" : "Track your product inquiries"}
-          </p>
+          <h1 className="text-2xl font-bold text-[#0D1B2A]">Deals</h1>
+          <p className="text-sm text-gray-500 mt-0.5">Track your trade deals</p>
         </div>
         <select
           value={statusFilter}
@@ -53,8 +50,6 @@ export default function DashboardRfqs() {
           className="text-sm border border-gray-200 rounded-lg px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#F7941D]/30"
         >
           <option value="all">All Status</option>
-          <option value="new">New</option>
-          <option value="quoted">Quoted</option>
           <option value="negotiating">Negotiating</option>
           <option value="contracted">Contracted</option>
           <option value="shipped">Shipped</option>
@@ -62,20 +57,14 @@ export default function DashboardRfqs() {
       </div>
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        {filtered.length === 0 ? (
+        {deals.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-            <FileText className="h-12 w-12 mb-3 opacity-20" />
-            <p className="font-medium text-[#0D1B2A]">No RFQs found</p>
-            <p className="text-sm mt-1">
-              {isSupplier
-                ? "When buyers send RFQs for your products, they'll appear here"
-                : "Browse the catalog and send an RFQ to a supplier"}
-            </p>
-            {!isSupplier && (
-              <Link href="/catalog">
-                <Button variant="outline" className="mt-4">Browse Catalog</Button>
-              </Link>
-            )}
+            <Handshake className="h-12 w-12 mb-3 opacity-20" />
+            <p className="font-medium text-[#0D1B2A]">No deals yet</p>
+            <p className="text-sm mt-1">Deals are created when RFQs are accepted and converted</p>
+            <Link href="/dashboard/rfqs">
+              <Button variant="outline" className="mt-4">View RFQs</Button>
+            </Link>
           </div>
         ) : (
           <table className="w-full">
@@ -83,7 +72,7 @@ export default function DashboardRfqs() {
               <tr>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  {isSupplier ? "Buyer" : "Supplier"}
+                  {user?.role === "supplier" ? "Buyer" : "Supplier"}
                 </th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Quantity</th>
                 <th className="text-left px-5 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
@@ -92,25 +81,25 @@ export default function DashboardRfqs() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filtered.map((rfq) => (
-                <tr key={rfq.id} className="hover:bg-gray-50 transition-colors">
+              {deals.map((deal) => (
+                <tr key={deal.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-5 py-4">
-                    <p className="font-medium text-sm text-[#0D1B2A] truncate max-w-[180px]">{rfq.productTitle}</p>
+                    <p className="font-medium text-sm text-[#0D1B2A] truncate max-w-[200px]">{deal.productTitle}</p>
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-600">
-                    {isSupplier ? rfq.buyerName : rfq.supplierName}
+                    {user?.role === "supplier" ? deal.buyerName : deal.supplierName}
                   </td>
-                  <td className="px-5 py-4 text-sm text-gray-600">{rfq.quantity}</td>
+                  <td className="px-5 py-4 text-sm text-gray-600">{deal.quantity}</td>
                   <td className="px-5 py-4">
-                    <span className={`inline-block text-xs px-2.5 py-1 rounded-full font-semibold ${STATUS_COLORS[rfq.status] ?? "bg-gray-100 text-gray-600"}`}>
-                      {STATUS_LABELS[rfq.status] ?? rfq.status}
+                    <span className={`inline-block text-xs px-2.5 py-1 rounded-full font-semibold ${STATUS_COLORS[deal.status] ?? "bg-gray-100 text-gray-600"}`}>
+                      {STATUS_LABELS[deal.status] ?? deal.status}
                     </span>
                   </td>
                   <td className="px-5 py-4 text-sm text-gray-500">
-                    {new Date(rfq.createdAt).toLocaleDateString()}
+                    {new Date(deal.createdAt).toLocaleDateString()}
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <Link href={`/dashboard/chat/${rfq.id}`}>
+                    <Link href={`/dashboard/chat/${deal.id}`}>
                       <Button variant="outline" size="sm">Open</Button>
                     </Link>
                   </td>

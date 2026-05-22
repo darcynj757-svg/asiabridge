@@ -17,6 +17,8 @@ import DashboardRfqs from "@/pages/DashboardRfqs";
 import DashboardChat from "@/pages/DashboardChat";
 import DashboardFavorites from "@/pages/DashboardFavorites";
 import DashboardProfile from "@/pages/DashboardProfile";
+import DashboardMessages from "@/pages/DashboardMessages";
+import DashboardDeals from "@/pages/DashboardDeals";
 import SupplierProfile from "@/pages/SupplierProfile";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ function Router() {
       <Route path="/dashboard/products" component={DashboardProducts} />
       <Route path="/dashboard/rfqs" component={DashboardRfqs} />
       <Route path="/dashboard/chat/:rfqId" component={DashboardChat} />
+      <Route path="/dashboard/messages" component={DashboardMessages} />
+      <Route path="/dashboard/deals" component={DashboardDeals} />
       <Route path="/dashboard/favorites" component={DashboardFavorites} />
       <Route path="/dashboard/profile" component={DashboardProfile} />
       <Route path="/suppliers/:id" component={SupplierProfile} />

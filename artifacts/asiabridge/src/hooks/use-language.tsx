@@ -111,12 +111,16 @@ const translations: Translations = {
 
   // Dashboard
   "dashboard.title": { ru: "Личный кабинет", en: "Dashboard" },
+  "dashboard.supplierMenu": { ru: "Меню поставщика", en: "Supplier Menu" },
+  "dashboard.buyerMenu": { ru: "Меню покупателя", en: "Buyer Menu" },
   "dashboard.overview": { ru: "Обзор", en: "Overview" },
   "dashboard.products": { ru: "Мои товары", en: "My Products" },
-  "dashboard.rfqs": { ru: "Запросы и сообщения", en: "RFQs & Messages" },
+  "dashboard.rfqs": { ru: "Запросы (RFQ)", en: "RFQs" },
   "dashboard.myRfqs": { ru: "Мои запросы", en: "My RFQs" },
+  "dashboard.messages": { ru: "Сообщения", en: "Messages" },
+  "dashboard.deals": { ru: "Сделки", en: "Deals" },
   "dashboard.favorites": { ru: "Избранное", en: "Favorites" },
-  "dashboard.profile": { ru: "Профиль компании", en: "Company Profile" },
+  "dashboard.profile": { ru: "Профиль", en: "Profile" },
 
   // Footer
   "footer.marketplace": { ru: "Маркетплейс", en: "Marketplace" },
