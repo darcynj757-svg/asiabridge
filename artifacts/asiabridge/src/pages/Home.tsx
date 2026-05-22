@@ -68,17 +68,6 @@ export default function Home() {
           </div>
         ))}
 
-        {/* Slide dots */}
-        <div className="absolute bottom-[148px] left-1/2 -translate-x-1/2 z-30 flex gap-2">
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setCurrentSlide(i)}
-              className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'w-2 bg-white/50 hover:bg-white/80'}`}
-            />
-          ))}
-        </div>
-
         {/* Hero text */}
         <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-24 pb-6">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
@@ -87,7 +76,7 @@ export default function Home() {
           <p className="text-lg md:text-xl text-white/85 mb-8 max-w-2xl mx-auto font-medium leading-relaxed">
             {t("hero.subtitle")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-10">
             <Link href="/catalog">
               <Button size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white text-base px-8 font-semibold w-full sm:w-auto shadow-xl shadow-orange-500/30 border-0">
                 {t("hero.cta")}
@@ -102,7 +91,7 @@ export default function Home() {
         </div>
 
         {/* Stats — glass cards inside hero at the bottom */}
-        <div className="relative z-20 px-4 pb-10">
+        <div className="relative z-20 px-4 pb-4">
           <div className="container mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {statsData.map(({ labelKey, value }) => (
@@ -125,6 +114,17 @@ export default function Home() {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Slide dots — below stats cards */}
+        <div className="relative z-20 flex justify-center gap-2 pb-6 pt-3">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentSlide(i)}
+              className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'w-2 bg-white/50 hover:bg-white/80'}`}
+            />
+          ))}
         </div>
       </section>
 
