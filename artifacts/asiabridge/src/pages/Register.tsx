@@ -27,8 +27,8 @@ export default function Register() {
 
   const registerMutation = useRegister({
     mutation: {
-      onSuccess: () => {
-        refetchUser();
+      onSuccess: async () => {
+        await refetchUser();
         setLocation("/dashboard");
       },
       onError: (error: any) => {

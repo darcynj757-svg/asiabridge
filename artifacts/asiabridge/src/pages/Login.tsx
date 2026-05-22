@@ -21,8 +21,8 @@ export default function Login() {
 
   const loginMutation = useLogin({
     mutation: {
-      onSuccess: () => {
-        refetchUser();
+      onSuccess: async () => {
+        await refetchUser();
         setLocation("/dashboard");
       },
       onError: (error: any) => {
