@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section — stats overlaid at bottom with glass effect */}
-      <section className="relative w-full overflow-hidden" style={{ minHeight: 620 }}>
+      <section className="relative w-full overflow-hidden" style={{ height: "calc(100vh - 64px)", minHeight: 520, maxHeight: 800 }}>
         {SLIDES.map((slide, index) => (
           <div
             key={index}
@@ -129,11 +129,11 @@ export default function Home() {
       </section>
 
       {/* Trade Direction Section */}
-      <section className="py-16 bg-[#0D1B2A]">
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-white mb-3">Торговля Россия ↔ АСЕАН</h2>
-            <p className="text-white/60 max-w-2xl mx-auto">Прямые поставки между Россией, СНГ и странами Юго-Восточной Азии без посредников</p>
+            <h2 className="text-3xl font-bold text-[#0D1B2A] mb-3">Торговля Россия ↔ АСЕАН</h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">Прямые поставки между Россией, СНГ и странами Юго-Восточной Азии без посредников</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             <div className="rounded-2xl overflow-hidden relative group cursor-pointer" onClick={() => window.location.href = '/catalog?country=Россия'}>
@@ -157,7 +157,7 @@ export default function Home() {
           </div>
           <div className="flex flex-wrap justify-center gap-3 mt-8">
             {['🇻🇳 Вьетнам','🇹🇭 Таиланд','🇮🇩 Индонезия','🇲🇾 Малайзия','🇵🇭 Филиппины','🇸🇬 Сингапур','🇰🇭 Камбоджа','🇲🇲 Мьянма'].map(c => (
-              <span key={c} className="bg-white/10 border border-white/20 text-white/80 text-sm px-3 py-1.5 rounded-full">{c}</span>
+              <span key={c} className="bg-gray-100 border border-gray-200 text-gray-700 text-sm px-3 py-1.5 rounded-full">{c}</span>
             ))}
           </div>
         </div>
