@@ -55,7 +55,9 @@ app.use(express.urlencoded({ extended: true }));
 
 const PgSession = connectPgSimple(session);
 
-const isProduction = process.env.NODE_ENV === "production";
+// On Replit the server always runs behind an HTTPS proxy (both dev and prod),
+// so cookies must always be secure + sameSite:"none".
+const behindHttpsProxy = !!(process.env.REPLIT_DEV_DOMAIN || process.env.NODE_ENV === "production");
 
 app.use(
   session({
@@ -68,8 +70,8 @@ app.use(
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      secure: isProduction,
-      sameSite: isProduction ? "none" : "lax",
+      secure: behindHttpsProxy,
+      sameSite: behindHttpsProxy ? "none" : "lax",
     },
   }),
 );
