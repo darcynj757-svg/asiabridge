@@ -56,20 +56,20 @@ export default function Home() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative h-[580px] w-full flex items-center justify-center overflow-hidden">
+      {/* Hero Section — stats overlaid at bottom with glass effect */}
+      <section className="relative w-full overflow-hidden" style={{ minHeight: 620 }}>
         {SLIDES.map((slide, index) => (
           <div
             key={index}
             className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${index === currentSlide ? "opacity-100" : "opacity-0"}`}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/65 via-[#0D1B2A]/55 to-[#0D1B2A]/80 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/60 via-[#0D1B2A]/50 to-[#0D1B2A]/85 z-10" />
             <img src={slide.img} alt={slide.alt} className="w-full h-full object-cover object-center" />
           </div>
         ))}
 
         {/* Slide dots */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex gap-2">
+        <div className="absolute bottom-[148px] left-1/2 -translate-x-1/2 z-30 flex gap-2">
           {SLIDES.map((_, i) => (
             <button
               key={i}
@@ -79,40 +79,51 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto">
+        {/* Hero text */}
+        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto pt-24 pb-6">
           <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight mb-6 drop-shadow-lg">
             {t("hero.title")}
           </h1>
-          <p className="text-lg md:text-xl text-white/85 mb-10 max-w-2xl mx-auto font-medium leading-relaxed">
+          <p className="text-lg md:text-xl text-white/85 mb-8 max-w-2xl mx-auto font-medium leading-relaxed">
             {t("hero.subtitle")}
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/catalog">
-              <Button size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white text-base h-13 px-8 font-semibold w-full sm:w-auto shadow-xl shadow-orange-500/30 border-0">
+              <Button size="lg" className="bg-[#F7941D] hover:bg-[#F7941D]/90 text-white text-base px-8 font-semibold w-full sm:w-auto shadow-xl shadow-orange-500/30 border-0">
                 {t("hero.cta")}
               </Button>
             </Link>
             <Link href="/register">
-              <Button size="lg" variant="outline" className="border-white/60 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm text-base h-13 px-8 font-semibold w-full sm:w-auto">
+              <Button size="lg" variant="outline" className="border-white/50 text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm text-base px-8 font-semibold w-full sm:w-auto">
                 {t("hero.partner")}
               </Button>
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* Stats Section — белый фон, яркие карточки */}
-      <section className="py-12 bg-white border-b border-gray-100">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-            {statsData.map(({ labelKey, value }) => (
-              <div key={labelKey} className="bg-[#0D1B2A] rounded-2xl p-6 text-center space-y-2 shadow-lg">
-                <div className="text-4xl md:text-5xl font-black text-[#F7941D]">
-                  {statsLoading ? <Skeleton className="h-12 w-16 mx-auto bg-white/10" /> : value ?? 0}
+        {/* Stats — glass cards inside hero at the bottom */}
+        <div className="relative z-20 px-4 pb-10">
+          <div className="container mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {statsData.map(({ labelKey, value }) => (
+                <div
+                  key={labelKey}
+                  className="rounded-2xl p-5 text-center space-y-1"
+                  style={{
+                    background: "rgba(255,255,255,0.10)",
+                    backdropFilter: "blur(20px) saturate(160%)",
+                    WebkitBackdropFilter: "blur(20px) saturate(160%)",
+                    border: "1px solid rgba(255,255,255,0.18)",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.18)",
+                  }}
+                >
+                  <div className="text-4xl md:text-5xl font-black text-[#F7941D]">
+                    {statsLoading ? <Skeleton className="h-12 w-16 mx-auto bg-white/10" /> : value ?? 0}
+                  </div>
+                  <div className="text-xs font-bold text-white uppercase tracking-widest">{t(labelKey)}</div>
                 </div>
-                <div className="text-xs font-bold text-white uppercase tracking-widest">{t(labelKey)}</div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
