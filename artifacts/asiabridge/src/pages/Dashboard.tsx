@@ -21,11 +21,7 @@ export default function Dashboard() {
     query: { enabled: !!user, queryKey: getListRfqsQueryKey() }
   });
 
-  if (!user) return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="w-8 h-8 border-4 border-[#F7941D] border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+  if (!user) return null;
 
   const activeDeals = myRfqs?.filter((r) => ["negotiating", "contracted"].includes(r.status)) ?? [];
   const recentDeals = activeDeals.slice(0, 5);

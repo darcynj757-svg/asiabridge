@@ -1,8 +1,8 @@
-import { Switch, Route, Router as WouterRouter } from "wouter";
+import { Switch, Route, Router as WouterRouter, Redirect } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AuthProvider } from "@/hooks/use-auth";
+import { AuthProvider, useAuth } from "@/hooks/use-auth";
 import { LanguageProvider } from "@/hooks/use-language";
 import NotFound from "@/pages/not-found";
 
@@ -23,6 +23,19 @@ import SupplierProfile from "@/pages/SupplierProfile";
 
 const queryClient = new QueryClient();
 
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+  const { user, isLoading } = useAuth();
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="w-8 h-8 border-4 border-[#F7941D] border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+  if (!user) return <Redirect to="/login" />;
+  return <Component />;
+}
+
 function Router() {
   return (
     <Switch>
@@ -31,14 +44,14 @@ function Router() {
       <Route path="/products/:id" component={ProductDetail} />
       <Route path="/login" component={Login} />
       <Route path="/register" component={Register} />
-      <Route path="/dashboard" component={Dashboard} />
-      <Route path="/dashboard/products" component={DashboardProducts} />
-      <Route path="/dashboard/rfqs" component={DashboardRfqs} />
-      <Route path="/dashboard/chat/:rfqId" component={DashboardChat} />
-      <Route path="/dashboard/messages" component={DashboardMessages} />
-      <Route path="/dashboard/deals" component={DashboardDeals} />
-      <Route path="/dashboard/favorites" component={DashboardFavorites} />
-      <Route path="/dashboard/profile" component={DashboardProfile} />
+      <Route path="/dashboard">{() => <ProtectedRoute component={Dashboard} />}</Route>
+      <Route path="/dashboard/products">{() => <ProtectedRoute component={DashboardProducts} />}</Route>
+      <Route path="/dashboard/rfqs">{() => <ProtectedRoute component={DashboardRfqs} />}</Route>
+      <Route path="/dashboard/chat/:rfqId">{() => <ProtectedRoute component={DashboardChat} />}</Route>
+      <Route path="/dashboard/messages">{() => <ProtectedRoute component={DashboardMessages} />}</Route>
+      <Route path="/dashboard/deals">{() => <ProtectedRoute component={DashboardDeals} />}</Route>
+      <Route path="/dashboard/favorites">{() => <ProtectedRoute component={DashboardFavorites} />}</Route>
+      <Route path="/dashboard/profile">{() => <ProtectedRoute component={DashboardProfile} />}</Route>
       <Route path="/suppliers/:id" component={SupplierProfile} />
       <Route component={NotFound} />
     </Switch>
