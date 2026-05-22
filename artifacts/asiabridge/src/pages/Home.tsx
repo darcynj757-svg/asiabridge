@@ -58,7 +58,7 @@ export default function Home() {
               index === currentSlide ? "opacity-100" : "opacity-0"
             }`}
           >
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/60 via-[#0D1B2A]/50 to-[#0D1B2A]/80 z-10" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#0D1B2A]/60 via-[#0D1B2A]/50 to-[#0a1628]/90 z-10" />
             <img
               src={slide.img}
               alt={slide.alt}
@@ -73,7 +73,7 @@ export default function Home() {
             <button
               key={i}
               onClick={() => setCurrentSlide(i)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'bg-white/40 hover:bg-white/70'}`}
+              className={`h-2 rounded-full transition-all duration-300 ${i === currentSlide ? 'bg-[#F7941D] w-6' : 'w-2 bg-white/40 hover:bg-white/70'}`}
             />
           ))}
         </div>
@@ -100,29 +100,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-14 bg-[#0D1B2A] border-b border-white/10">
+      {/* Stats Section — transparent, glass cards */}
+      <section className="py-14 border-b border-white/8">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
             {[
               { label: "Suppliers", value: stats?.totalSuppliers },
               { label: "Buyers", value: stats?.totalBuyers },
               { label: "Products", value: stats?.totalProducts },
               { label: "Deals Closed", value: stats?.totalDeals },
             ].map(({ label, value }) => (
-              <div key={label} className="glass rounded-2xl p-6 space-y-2">
+              <div key={label} className="glass rounded-2xl p-6 text-center space-y-2">
                 <div className="text-4xl font-black text-[#F7941D]">
                   {statsLoading ? <Skeleton className="h-10 w-20 mx-auto bg-white/10" /> : value || 0}
                 </div>
-                <div className="text-sm font-semibold text-white/60 uppercase tracking-widest">{label}</div>
+                <div className="text-sm font-semibold text-white uppercase tracking-widest">{label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Categories Section */}
-      <section className="py-20 bg-[#0D1B2A]">
+      {/* Categories Section — transparent background */}
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
             <div>
@@ -171,8 +171,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-20 bg-gradient-to-b from-[#0D1B2A] to-[#0D1B2A]/95">
+      {/* Features Section — transparent, glass cards with white text */}
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16 max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold text-white mb-4">Why AsiaBridge?</h2>
@@ -189,7 +189,7 @@ export default function Home() {
                 </div>
                 <div>
                   <h3 className="font-bold text-white mb-2 group-hover:text-[#F7941D] transition-colors">{feature.title}</h3>
-                  <p className="text-sm text-white/50 leading-relaxed">{feature.desc}</p>
+                  <p className="text-sm text-white/60 leading-relaxed">{feature.desc}</p>
                 </div>
               </div>
             ))}
