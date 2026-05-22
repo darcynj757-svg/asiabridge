@@ -12,6 +12,31 @@ import { Building2, MapPin, Package, ShieldCheck, Heart, FileText, Anchor, Plane
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
+const CATEGORY_IMAGES: Record<string, string> = {
+  "Machinery & Equipment": "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&h=675&fit=crop&auto=format",
+  "Food & Beverages": "https://images.unsplash.com/photo-1467810563316-b5476525c0f9?w=1200&h=675&fit=crop&auto=format",
+  "Chemicals": "https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=1200&h=675&fit=crop&auto=format",
+};
+
+const TITLE_IMAGES: Record<string, string> = {
+  "hydraulic press": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?w=1200&h=675&fit=crop&auto=format",
+  "electric motor": "https://images.unsplash.com/photo-1555680202-c86f0e12f086?w=1200&h=675&fit=crop&auto=format",
+  "sunflower oil": "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=1200&h=675&fit=crop&auto=format",
+  "wheat": "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1200&h=675&fit=crop&auto=format",
+  "buckwheat": "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=1200&h=675&fit=crop&auto=format",
+  "npk": "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200&h=675&fit=crop&auto=format",
+  "polyethylene": "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=1200&h=675&fit=crop&auto=format",
+};
+
+function getProductImage(title: string, category: string, images?: string[]): string {
+  if (images?.[0]) return images[0];
+  const lower = title.toLowerCase();
+  for (const [key, url] of Object.entries(TITLE_IMAGES)) {
+    if (lower.includes(key)) return url;
+  }
+  return CATEGORY_IMAGES[category] ?? "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1200&h=675&fit=crop&auto=format";
+}
+
 export default function ProductDetail({ params }: { params: { id: string } }) {
   const { user } = useAuth();
   const [, setLocation] = useLocation();
@@ -134,14 +159,12 @@ export default function ProductDetail({ params }: { params: { id: string } }) {
           {/* Main Product Area */}
           <div className="lg:col-span-2 space-y-8">
             <div className="bg-white rounded-xl border border-border overflow-hidden">
-              <div className="aspect-[16/9] bg-muted relative">
-                {product.images?.[0] ? (
-                  <img src={product.images[0]} alt={product.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <Package className="h-20 w-20 text-gray-300" />
-                  </div>
-                )}
+              <div className="aspect-[16/9] bg-muted relative overflow-hidden">
+                <img
+                  src={getProductImage(product.title, product.category ?? "", product.images ?? [])}
+                  alt={product.title}
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="p-8">
                 <div className="flex justify-between items-start mb-4">
